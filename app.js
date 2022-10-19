@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const userRoute = require('./routes/user');
 
 /*const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "./.env") });*/
+require("dotenv").config({ path: path.join(__dirname, ".env") });*/
 
-require('dotenv').config();
-console.log("DB_USERNAME DB_CLIENT_USERNAME: " + process.env.DB_CLIENT_USERNAME);
+const dotenv = require('dotenv').config('../.env');
+
+console.log("DB_USERNAME dotenv: " + dotenv);
+console.log("DB_USERNAME DB_CLIENT_USERNAME: " + process.env.MONGODB_USER);
 
 //const DB_USERNAME = process.env.DB_CLIENT_USERNAME;
 //const DB_PASSWORD = process.env.DB_CLIENT_PASSWORD;
@@ -31,5 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+
+app.use('/api/auth', userRoute);
 
 module.exports = app;
