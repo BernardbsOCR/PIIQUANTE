@@ -1,24 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const userRoute = require('./routes/user');
+const sauceRoute = require('./routes/sauce');
 
-/*const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, ".env") });*/
-
-const dotenv = require('dotenv').config('../.env');
-
-console.log("DB_USERNAME dotenv: " + dotenv);
-console.log("DB_USERNAME DB_CLIENT_USERNAME: " + process.env.MONGODB_USER);
-
-//const DB_USERNAME = process.env.DB_CLIENT_USERNAME;
-//const DB_PASSWORD = process.env.DB_CLIENT_PASSWORD;
-
-const DB_USERNAME = "Client";
-const DB_PASSWORD = "clientmongo2000";
+require("dotenv").config({ path: path.join(__dirname, "./.env") });
 
 //-------------------------
 
-mongoose.connect(`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@database.emdt5lw.mongodb.net/?retryWrites=true&w=majority`,
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@database.emdt5lw.mongodb.net/?retryWrites=true&w=majority`,
     { useNewUrlParser: true,
     useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -36,5 +26,9 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/auth', userRoute);
+
+app.use('/api/sauces', sauceRoute);
+
+app.use('/images/', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
