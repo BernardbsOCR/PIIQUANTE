@@ -1,10 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const userRoute = require('./routes/user');
 const sauceRoute = require('./routes/sauce');
 
 require("dotenv").config({ path: path.join(__dirname, "./.env") });
+
+limiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 50,
+    standardHeaders: true,
+	legacyHeaders: false,
+})
 
 //-------------------------
 
@@ -27,7 +35,7 @@ app.use(express.json());
 
 app.use('/api/auth', userRoute);
 
-app.use('/api/sauces', sauceRoute);
+app.use('/api/sauces', limiter, sauceRoute);
 
 app.use('/images/', express.static(path.join(__dirname, 'images')));
 
